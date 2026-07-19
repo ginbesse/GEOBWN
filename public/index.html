@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>APK Dönüştürücü</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 2rem; background: linear-gradient(135deg, #0f172a, #111827); color: #f8fafc; }
+      .card { max-width: 820px; margin: 0 auto; background: rgba(17,24,39,0.92); padding: 1.5rem; border-radius: 18px; box-shadow: 0 16px 40px rgba(0,0,0,.3); }
+      input, button { width: 100%; padding: 0.9rem; margin-top: 0.75rem; border-radius: 12px; border: 1px solid #334155; }
+      button { background: linear-gradient(135deg, #2563eb, #4338ca); color: white; cursor: pointer; font-weight: 700; }
+      pre { background: #020617; padding: 1rem; overflow-x: auto; border-radius: 12px; white-space: pre-wrap; }
+      .hint { margin-top: 1rem; color: #cbd5e1; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Dosyadan Android APK üretici</h1>
+      <p>Bir dosyanın yolunu verin; sistem dosyayı analiz edip Termux üzerinde derlenebilecek gerçek Android proje şablonu üretir.</p>
+      <label for="filePath">Dosya yolu</label>
+      <input id="filePath" placeholder="C:/Users/you/Desktop/sample.html" />
+      <label for="appName">Uygulama adı</label>
+      <input id="appName" placeholder="DemoApp" />
+      <button onclick="convert()">Dönüştür</button>
+      <div class="hint">
+        <strong>Termux için:</strong> Üretilen proje klasöründeki <code>build-apk.sh</code> betiğini çalıştırın. Bu betik Android SDK ve Gradle kurup APK oluşturur.
+      </div>
+      <pre id="result">Bekleniyor...</pre>
+    </div>
+    <script>
+      async function convert() {
+        const filePath = document.getElementById('filePath').value;
+        const appName = document.getElementById('appName').value;
+        const result = document.getElementById('result');
+        result.textContent = 'İşleniyor...';
+        try {
+          const response = await fetch('/api/convert', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ filePath, appName })
+          });
+          const payload = await response.json();
+          result.textContent = JSON.stringify(payload, null, 2);
+        } catch (error) {
+          result.textContent = 'Hata: ' + error.message;
+        }
+      }
+    </script>
+  </body>
+</html>

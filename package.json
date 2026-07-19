@@ -1,0 +1,10 @@
+{
+  "name": "consent-remote-management-demo",
+  "version": "1.0.0",
+  "description": "Consent-based remote device management demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  }
+}
